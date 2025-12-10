@@ -1,3 +1,81 @@
+-- SQL Fundamentals Quick Guide
+
+-- 1. DATABASE BASICS
+-- SQL: Structured Query Language for managing relational databases.
+-- RDBMS: MySQL, PostgreSQL, SQLite, etc.
+-- Tables: Rows (records) and Columns (fields/attributes).
+
+-- 2. DATA TYPES
+-- INT: Whole numbers (e.g., 123)
+-- VARCHAR(n): Strings up to n chars (e.g., 'John')
+-- TEXT: Long strings
+-- DATE: 'YYYY-MM-DD'
+-- FLOAT/DECIMAL: Decimals (e.g., 3.14)
+-- BOOLEAN: TRUE/FALSE
+
+-- 3. CREATE DATABASE/TABLE
+CREATE DATABASE School;
+USE School;
+
+CREATE TABLE Students (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(50) NOT NULL,
+    age INT,
+    grade CHAR(1)
+);
+
+-- 4. INSERT DATA
+INSERT INTO Students (name, age, grade) VALUES ('Alice', 20, 'A');
+INSERT INTO Students (name, age, grade) VALUES ('Bob', 22, 'B'), ('Charlie', 21, 'A');
+
+-- 5. SELECT DATA
+SELECT * FROM Students;  -- All columns
+SELECT name, grade FROM Students;  -- Specific columns
+SELECT * FROM Students WHERE age > 20;  -- Filter
+SELECT * FROM Students ORDER BY age DESC;  -- Sort
+SELECT COUNT(*) FROM Students;  -- Aggregate
+
+-- 6. UPDATE DATA
+UPDATE Students SET grade = 'A' WHERE id = 1;
+
+-- 7. DELETE DATA
+DELETE FROM Students WHERE age < 20;
+
+-- 8. JOINS
+CREATE TABLE Courses (
+    id INT PRIMARY KEY,
+    student_id INT,
+    course_name VARCHAR(50),
+    FOREIGN KEY (student_id) REFERENCES Students(id)
+);
+
+INSERT INTO Courses (student_id, course_name) VALUES (1, 'Math'), (2, 'Science');
+
+SELECT Students.name, Courses.course_name
+FROM Students
+INNER JOIN Courses ON Students.id = Courses.student_id;
+
+-- 9. AGGREGATE FUNCTIONS
+SELECT AVG(age) AS avg_age FROM Students;
+SELECT grade, COUNT(*) FROM Students GROUP BY grade;
+
+-- 10. SUBQUERIES
+SELECT name FROM Students WHERE age = (SELECT MAX(age) FROM Students);
+
+-- 11. INDEXES (for speed)
+CREATE INDEX idx_age ON Students(age);
+
+-- 12. VIEWS (virtual tables)
+CREATE VIEW TopStudents AS SELECT * FROM Students WHERE grade = 'A';
+
+-- 13. TRANSACTIONS
+START TRANSACTION;
+UPDATE Students SET age = age + 1 WHERE id = 1;
+COMMIT;  -- Or ROLLBACK;
+
+-- Practice: Create a table, insert data, query it. Use SQLite for local testing.
+-- Common mistakes: Forgetting semicolons, case sensitivity (table names), NULL handling.
+
 -- Create Table
 CREATE TABLE Users (
     id INT PRIMARY KEY,
